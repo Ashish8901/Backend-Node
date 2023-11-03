@@ -1,0 +1,187 @@
+swagger: '2.0'
+info:
+  description: 'This is a sample RevanaTech server.'
+  version: '1.0.0'
+  title: 'RevanaTech Blogs'
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: 'apiteam@swagger.io'
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: 'localhost:4000'
+basePath: ''
+tags:
+  - name: 'Blog'
+    description: 'Everything about your Blogs'
+  - name: 'user'
+    description: 'Access to Users'
+  - name: 'contact'
+    description: 'Access to contact form'
+  - name: 'carrer'
+    description: 'Operations about carrer'
+
+schemes:
+  - 'https'
+  - 'http'
+paths:
+  /post/create:
+    post:
+      security:
+         - Bearer: []
+      tags:
+        - 'Blog'
+      summary: 'Add a new blog to the database'
+      description: ''
+      operationId: 'addblog'
+      consumes:
+      - 'application/json'
+      - multipart/form-data
+      produces:
+      - 'application/xml'
+      - 'application/json'
+      parameters:
+      - in: formData
+        name: photo
+        type: file
+        description: The file to upload.
+      - in: 'body'
+        name: 'body'
+        description: 'Blog object that needs to be added to the database'
+        required: true
+        schema:
+            $ref: '#/definitions/Blog'
+      responses:
+        '405':
+          description: 'Invalid input'
+
+securityDefinitions:
+     
+    Bearer:
+       type: "apiKey"
+       name: "Authorization"
+       in: "header"
+
+
+definitions:
+  Category:
+    type: 'object'
+    required:
+      - 'name'
+      - 'SEOtitle'
+      - 'SEOdescription'
+      - 'SEOkeywords'
+      - 'description'
+      
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+      name:
+        type: 'string'
+      description: 
+        type: 'string'
+
+      SEOtitle:
+        type: 'string'
+
+      SEOdescription:
+        type: 'string'
+
+      SEOkeywords:
+        type: 'array'
+        format: 'string'
+      photo:
+         type: 'string'
+    xml:
+      name: 'Category'
+
+  User:
+    type: 'object'
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+      username:
+        type: 'string'
+      firstName:
+        type: 'string'
+      lastName:
+        type: 'string'
+      email:
+        type: 'string'
+      password:
+        type: 'string'
+      phone:
+        type: 'string'
+      userStatus:
+        type: 'integer'
+        format: 'int32'
+        description: 'User Status'
+    xml:
+      name: 'User'
+
+  Blog:
+    type: 'object'
+    required:
+      - 'title'
+      - 'photo'
+      - 'category'
+      - 'SEOtitle'
+      - 'SEOdescription'
+      - 'SEOkeywords'
+      - 'description'
+      - 'status'
+
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
+      category:
+         type: 'string'
+        # $ref: '#/definitions/Category'
+      title:
+        type: 'string'
+
+      description:
+        type: 'string'
+
+      SEOtitle:
+        type: 'string'
+
+      SEOdescription:
+        type: 'string'
+
+      SEOkeywords:
+        type: 'string'
+ 
+      status:
+        type: 'string'
+        enum:
+          - 'Publish'
+          - 'Draft'
+          - 'Deleted'
+        default: 'Draft'
+        collectionFormat: 'multi'
+
+      # isActive:
+      #   type: Boolean,
+      #   default: true,
+
+    xml:
+      name: 'Blog'
+      wrapped: true
+
+  ApiResponse:
+    type: 'object'
+    properties:
+      code:
+        type: 'integer'
+        format: 'int32'
+      type:
+        type: 'string'
+      message:
+        type: 'string'
+externalDocs:
+  description: 'Find out more about Swagger'
+  url: 'http://swagger.io'
